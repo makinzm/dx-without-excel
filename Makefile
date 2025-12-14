@@ -31,9 +31,9 @@ install-browsers:
 test:
 	uv run pytest --no-cov
 
-# Run tests with coverage
+# Run tests with coverage (unit tests only)
 test-cov:
-	uv run pytest
+	uv run pytest tests/unit/
 
 # Run tests with HTML coverage and open report
 test-cov-html: test-cov
