@@ -1,11 +1,11 @@
 # Makefile for dx-without-excel project
 
-.PHONY: test test-cov test-cov-html e2e-test clean install install-browsers lint format help
+.PHONY: test test-cov test-cov-html e2e-test clean install install-browsers lint format pre-commit help
 
 # Default target
 help:
 	@echo "Available commands:"
-	@echo "  make install         - Install dependencies"
+	@echo "  make install         - Install dependencies and setup pre-commit"
 	@echo "  make install-browsers - Install Chromium browser for Playwright"
 	@echo "  make test            - Run tests without coverage"
 	@echo "  make test-cov        - Run tests with coverage report"
@@ -13,11 +13,13 @@ help:
 	@echo "  make e2e-test        - Run end-to-end tests only"
 	@echo "  make lint            - Run linting with ruff"
 	@echo "  make format          - Format code with ruff"
+	@echo "  make pre-commit      - Run pre-commit hooks manually"
 	@echo "  make clean           - Clean generated files"
 
 # Install dependencies
 install:
 	uv sync
+	uv run pre-commit install
 
 # Install Chromium browser for Playwright
 install-browsers:
@@ -54,6 +56,10 @@ lint:
 format:
 	uv run ruff format .
 	uv run ruff check --fix .
+
+# Run pre-commit hooks manually
+pre-commit:
+	uv run pre-commit run --all-files
 
 # Clean generated files
 clean:

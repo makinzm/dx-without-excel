@@ -6,24 +6,6 @@ ExcelのないDXソリューション - チーム管理システム
 
 このプロジェクトは、Excelに依存せずにチーム管理を行うためのWebアプリケーションです。StreamlitとPythonを使用して構築されています。
 
-## 📁 プロジェクト構造
-
-```
-dx-without-excel/
-├── src/
-│   ├── domain/          # ドメインロジック
-│   │   └── team.py      # チームエンティティ
-│   └── presentation/    # プレゼンテーション層
-│       ├── app.py       # Streamlitアプリケーション
-│       └── team_manager.py  # チーム管理サービス
-├── tests/
-│   └── unit/           # ユニットテスト
-│       ├── domain/
-│       └── presentation/
-├── pyproject.toml      # プロジェクト設定
-└── Makefile           # 開発用コマンド
-```
-
 ## 🧪 テスト & カバレッジ
 
 このプロジェクトでは高品質なコードを保つために、包括的なテストスイートとカバレッジ測定を実装しています。
@@ -66,6 +48,9 @@ make test-cov-html
 ### セットアップ手順
 
 ```bash
+# Devbox環境に入る
+devbox shell
+
 # 依存関係のインストール
 make install
 
