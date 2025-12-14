@@ -1,0 +1,67 @@
+# チーム設定: 営業チームA
+team:
+  id: "team_a"
+  name: "営業チームA"
+  description: "東京エリア担当の営業チーム"
+
+# データフォーマット設定
+data_format:
+  # CSV列定義
+  columns:
+    - name: "date"
+      type: "datetime"
+      format: "%Y-%m-%d"
+      required: true
+      description: "売上発生日"
+    
+    - name: "sales_rep"
+      type: "string"
+      required: true
+      description: "  担当者名"
+    
+    - name: "customer"
+      type: "string"
+      required: true
+      description: "顧客名"
+    
+    - name: "product"
+      type: "string"
+      required: true
+      description: "商品名"
+    
+    - name: "quantity"
+      type: "int"
+      required: true
+      description: "販売数量"
+    
+    - name: "unit_price"
+      type: "float"
+      required: true
+      description: "単価"
+    
+    - name: "discount_rate"
+      type: "float"
+      required: false
+      default: 0.0
+      description: "割引率（0.0-1.0）"
+
+# 計算ルール設定
+calculation_rules:
+  # 基本売上計算
+  - name: "gross_revenue"
+    formula: "quantity * unit_price"
+    description: "粗売上 = 数量 × 単価"
+    
+  - name: "discount_amount"
+    formula: "gross_revenue * discount_rate"
+    description: "割引金額 = 粗売上 × 割引率"
+    
+  - name: "net_revenue"
+    formula: "gross_revenue - discount_amount"
+    description: "純売上 = 粗売上 - 割引金額"
+    
+  # 月次集計用
+  - name: "monthly_total"
+    formula: "SUM(net_revenue)"
+    group_by: ["date::month", "sales_rep"]
+    description: "月次・担当者別売上合計"

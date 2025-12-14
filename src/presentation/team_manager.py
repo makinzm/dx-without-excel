@@ -1,5 +1,6 @@
 """Team manager for session state abstraction."""
 from src.domain.team import Team
+from src.infrastructure.config.loader import ConfigurationError, TeamConfigManager
 
 
 class TeamManager:
@@ -8,18 +9,18 @@ class TeamManager:
     def __init__(self) -> None:
         """Initialize team manager."""
         self._teams: dict[str, Team] = {}
-        self._initialize_sample_teams()
+        self._config_manager = TeamConfigManager()
+        self._config_error: str | None = None
+        self._load_teams_from_config()
 
-    def _initialize_sample_teams(self) -> None:
-        """サンプルチームの初期化."""
-        self._teams = {
-            "team_a": Team(
-                id="team_a", name="営業チームA", description="サンプルチームA",
-            ),
-            "team_b": Team(
-                id="team_b", name="営業チームB", description="サンプルチームB",
-            ),
-        }
+    def _load_teams_from_config(self) -> None:
+        """設定ファイルからチームを読み込む."""
+        try:
+            self._teams = self._config_manager.load_all_teams()
+            self._config_error = None
+        except ConfigurationError as e:
+            self._config_error = str(e)
+            self._teams = {}
 
     def get_all_teams(self) -> dict[str, Team]:
         """全チームを取得."""
@@ -53,3 +54,29 @@ class TeamManager:
     def get_team_count(self) -> int:
         """チーム数を取得."""
         return len(self._teams)
+
+    def get_config_error(self) -> str | None:
+        """設定エラーメッセージを取得."""
+        return self._config_error
+
+    def has_config_error(self) -> bool:
+        """設定エラーがあるかどうか."""
+        return self._config_error is not None
+
+    def reload_config(self) -> None:
+        """設定ファイルを再読み込み."""
+        self._load_teams_from_config()
+
+    def get_team_data_format(self, team_id: str) -> dict | None:
+        """チームのデータフォーマット設定を取得."""
+        try:
+            return self._config_manager.load_team_data_format(team_id)
+        except ConfigurationError:
+            return None
+
+    def get_team_calculation_rules(self, team_id: str) -> list | None:
+        """チームの計算ルール設定を取得."""
+        try:
+            return self._config_manager.load_team_calculation_rules(team_id)
+        except ConfigurationError:
+            return None

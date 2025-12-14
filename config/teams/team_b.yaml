@@ -1,0 +1,66 @@
+# チーム設定: 営業チームB
+team:
+  id: "team_b"
+  name: "営業チームB"
+  description: "大阪エリア担当の営業チーム"
+
+# データフォーマット設定
+data_format:
+  # CSV列定義（チームBは異なるフォーマット）
+  columns:
+    - name: "売上日"
+      type: "datetime"
+      format: "%Y/%m/%d"
+      required: true
+      description: "売上発生日（日本語列名）"
+    
+    - name: "担当者"
+      type: "string"
+      required: true
+      description: "営業担当者"
+    
+    - name: "取引先"
+      type: "string"
+      required: true
+      description: "取引先企業名"
+    
+    - name: "商品コード"
+      type: "string"
+      required: true
+      description: "商品管理コード"
+    
+    - name: "売上高"
+      type: "float"
+      required: true
+      description: "売上金額（税込）"
+    
+    - name: "原価"
+      type: "float"
+      required: true
+      description: "商品原価"
+    
+    - name: "手数料率"
+      type: "float"
+      required: false
+      default: 0.05
+      description: "販売手数料率"
+
+# 計算ルール設定
+calculation_rules:
+  # 利益計算
+  - name: "gross_profit"
+    formula: "売上高 - 原価"
+    description: "粗利益 = 売上高 - 原価"
+    
+  - name: "commission"
+    formula: "売上高 * 手数料率"
+    description: "販売手数料 = 売上高 × 手数料率"
+    
+  - name: "net_profit"
+    formula: "gross_profit - commission"
+    description: "純利益 = 粗利益 - 販売手数料"
+    
+  # 利益率計算
+  - name: "profit_margin"
+    formula: "(net_profit / 売上高) * 100"
+    description: "利益率(%) = (純利益 / 売上高) × 100"

@@ -19,7 +19,7 @@ class TestTeamSelectionUI:
         expect(page).to_have_title(re.compile("Excel DX 設定管理"))
 
         # ヘッダー確認
-        expect(page.get_by_role("heading", name="📊 Excel DX 設定管理システム")).to_be_visible()  # noqa: E501
+        expect(page.get_by_role("heading", name="📊 Excel DX 設定管理システム")).to_be_visible()
 
     def test_sidebar_has_team_selection(self, page: Page) -> None:
         """サイドバーにチーム選択UIが表示される."""
@@ -132,8 +132,6 @@ class TestTabSwitching:
             "heading", name="📊 データフォーマット設定",
         )
         expect(format_heading).to_be_visible()
-        todo_text = page.get_by_text("TODO: データフォーマット設定機能")
-        expect(todo_text).to_be_visible()
 
     def test_can_switch_to_calculation_rules_tab(self, page: Page) -> None:
         """計算ルールタブをクリックすると内容が表示される."""
@@ -141,7 +139,7 @@ class TestTabSwitching:
         page.get_by_role("tab", name="🧮 計算ルール").click()
         calc_heading = page.get_by_role("heading", name="🧮 計算ルール設定")
         expect(calc_heading).to_be_visible()
-        expect(page.get_by_text("TODO: 計算ルール設定機能")).to_be_visible()
+        expect(page.get_by_text("🧮 計算ルール設定")).to_be_visible()
 
     def test_can_switch_to_git_integration_tab(self, page: Page) -> None:
         """Git連携タブをクリックすると内容が表示される."""

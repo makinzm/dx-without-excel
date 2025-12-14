@@ -1,0 +1,20 @@
+# アプリケーション全体設定
+app:
+  name: "売上CSV DX化システム"
+  version: "0.1.0"
+  description: "月次売上ExcelをCSV処理でDX化するシステム"
+
+# ストレージ設定（将来の拡張用）
+storage:
+  type: "local"  # 将来: "s3", "database"
+  local_path: "data/"
+
+# 認証設定（将来の拡張用）
+auth:
+  enabled: false  # 将来: true
+  type: "config_file"  # 将来: "jwt", "oauth2"
+
+# ログ設定
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

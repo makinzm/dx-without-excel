@@ -1,4 +1,5 @@
 """Main Streamlit application."""
+import pandas as pd
 import streamlit as st
 
 from src.presentation.team_manager import TeamManager
@@ -14,6 +15,13 @@ if "team_manager" not in st.session_state:
     st.session_state.team_manager = TeamManager()
 
 manager = st.session_state.team_manager
+
+# 設定エラーがある場合の警告表示
+if manager.has_config_error():
+    st.error(f"⚠️ 設定エラー: {manager.get_config_error()}")
+    if st.button("設定を再読み込み"):
+        manager.reload_config()
+        st.rerun()
 
 # サイドバー
 st.sidebar.title("🏢 チーム選択")
@@ -102,14 +110,65 @@ with tab2:
     if selected_team_id:
         team = manager.get_team(selected_team_id)
         st.info(f"チーム: {team.name}")
-    st.write("TODO: データフォーマット設定機能")
+
+        # データフォーマット設定の表示
+        data_format_config = manager.get_team_data_format(selected_team_id)
+        if data_format_config:
+            st.subheader("CSV列定義")
+
+            if "columns" in data_format_config:
+                columns_df = pd.DataFrame(data_format_config["columns"])
+                st.dataframe(columns_df, width="stretch")
+
+                # 列定義の詳細表示
+                with st.expander("列定義の詳細"):
+                    for col in data_format_config["columns"]:
+                        col_name = col["name"]
+                        col_type = col["type"]
+                        required = "必須" if col.get("required", True) else "任意"
+                        description = col.get("description", "")
+
+                        st.markdown(f"**{col_name}** ({col_type}) - {required}")
+                        if description:
+                            st.caption(description)
+                        st.divider()
+        else:
+            st.warning("データフォーマット設定が読み込めませんでした")
+    else:
+        st.info("チームを選択してデータフォーマット設定を確認してください")
 
 with tab3:
     st.header("🧮 計算ルール設定")
     if selected_team_id:
         team = manager.get_team(selected_team_id)
         st.info(f"チーム: {team.name}")
-    st.write("TODO: 計算ルール設定機能")
+
+        # 計算ルール設定の表示
+        calculation_rules = manager.get_team_calculation_rules(selected_team_id)
+        if calculation_rules:
+            st.subheader("計算式一覧")
+
+            for i, rule in enumerate(calculation_rules):
+                with st.container():
+                    col1, col2 = st.columns([1, 3])
+
+                    with col1:
+                        st.markdown(f"**{rule.name}**")
+                        st.code(rule.formula, language="python")
+
+                    with col2:
+                        if rule.description:
+                            st.markdown(rule.description)
+
+                        if rule.group_by:
+                            st.caption(f"グループ化: {', '.join(rule.group_by)}")
+
+                    if i < len(calculation_rules) - 1:
+                        st.divider()
+        else:
+            st.warning("計算ルール設定が読み込めませんでした")
+    else:
+        st.info("チームを選択して計算ルール設定を確認してください")
 
 with tab4:
     st.header("🔄 Git連携")
