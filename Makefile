@@ -11,7 +11,10 @@ help:
 	@echo "  make test-cov        - Run tests with coverage report"
 	@echo "  make test-cov-html   - Run tests with HTML coverage report and open it"
 	@echo "  make unit-test       - Run unit tests only (no coverage)"
+	@echo "  make run             - Run the Streamlit application"
+	@echo "  make e2e-test-with-server - Run end-to-end tests with Streamlit server"
 	@echo "  make e2e-test        - Run end-to-end tests only"
+	@echo "  make fix-lint        - Fix linting issues with ruff"
 	@echo "  make lint            - Run linting with ruff"
 	@echo "  make format          - Format code with ruff"
 	@echo "  make pre-commit      - Run pre-commit hooks manually"
@@ -50,6 +53,9 @@ test-cov-html: test-cov
 unit-test:
 	uv run pytest tests/unit/ --no-cov
 
+run:
+	uv run streamlit run src/presentation/app.py
+
 # Run end-to-end tests only
 e2e-test:
 	uv run pytest tests/e2e/ --no-cov
@@ -72,6 +78,10 @@ e2e-test-with-server:
 	echo "Stopping Streamlit server..."; \
 	kill $$SERVER_PID 2>/dev/null || true; \
 	exit $$TEST_RESULT
+
+# Fix linting issues
+fix-lint:
+	uv run ruff check . --fix
 
 # Run linting
 lint:
