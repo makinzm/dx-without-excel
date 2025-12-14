@@ -1,6 +1,6 @@
 # Makefile for dx-without-excel project
 
-.PHONY: test test-cov test-cov-html e2e-test clean install install-browsers lint format pre-commit help
+.PHONY: test test-cov test-cov-html unit-test e2e-test clean install install-browsers lint format pre-commit help
 
 # Default target
 help:
@@ -10,6 +10,7 @@ help:
 	@echo "  make test            - Run tests without coverage"
 	@echo "  make test-cov        - Run tests with coverage report"
 	@echo "  make test-cov-html   - Run tests with HTML coverage report and open it"
+	@echo "  make unit-test       - Run unit tests only (no coverage)"
 	@echo "  make e2e-test        - Run end-to-end tests only"
 	@echo "  make lint            - Run linting with ruff"
 	@echo "  make format          - Format code with ruff"
@@ -43,6 +44,10 @@ test-cov-html: test-cov
 	else \
 		echo "Please open htmlcov/index.html in your browser"; \
 	fi
+
+# Run unit tests only
+unit-test:
+	uv run pytest tests/unit/ --no-cov
 
 # Run end-to-end tests only
 e2e-test:
