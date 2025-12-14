@@ -70,7 +70,11 @@ with tab1:
                     st.error("チームIDとチーム名は必須です")
                 else:
                     try:
-                        manager.create_team(team_id.strip(), team_name.strip(), description.strip())
+                        manager.create_team(
+                            team_id.strip(),
+                            team_name.strip(),
+                            description.strip(),
+                        )
                         st.success(f"✅ チーム '{team_name.strip()}' を作成しました")
                         st.session_state.show_create_form = False
                     except ValueError as e:
