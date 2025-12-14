@@ -21,6 +21,7 @@ help:
 install:
 	uv sync
 	uv run pre-commit install
+	uv run playwright install chromium
 
 # Install Chromium browser for Playwright
 install-browsers:
