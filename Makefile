@@ -54,6 +54,25 @@ unit-test:
 e2e-test:
 	uv run pytest tests/e2e/ --no-cov
 
+# Run end-to-end tests with Streamlit server
+e2e-test-with-server:
+	@echo "Starting Streamlit server..."
+	@uv run streamlit run src/presentation/app.py --server.port 8501 --server.headless true &
+	@SERVER_PID=$$!; \
+	echo "Waiting for server to start..."; \
+	sleep 5; \
+	echo "Running E2E tests..."; \
+	if uv run pytest tests/e2e/ --no-cov; then \
+		echo "E2E tests passed"; \
+		TEST_RESULT=0; \
+	else \
+		echo "E2E tests failed"; \
+		TEST_RESULT=1; \
+	fi; \
+	echo "Stopping Streamlit server..."; \
+	kill $$SERVER_PID 2>/dev/null || true; \
+	exit $$TEST_RESULT
+
 # Run linting
 lint:
 	uv run ruff check .

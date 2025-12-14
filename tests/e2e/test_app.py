@@ -1,10 +1,11 @@
 """E2Eテスト用ファイル."""
+import os
 import re
 
 from playwright.sync_api import Page, expect
 
 # グローバル定数
-BASE_URL = "http://localhost:8501"
+BASE_URL = os.getenv("E2E_BASE_URL", "http://localhost:8501")
 
 
 class TestTeamSelectionUI:

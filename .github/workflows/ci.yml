@@ -37,7 +37,8 @@ jobs:
         fail_ci_if_error: false
     
     - name: Run end-to-end tests
-      run: devbox run -- make e2e-test
+      run: devbox run -- make e2e-test-with-server
       env:
-        # Disable browser UI for headless testing
+        E2E_BASE_URL: http://localhost:8501
+        E2E_HEADLESS: true
         PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
