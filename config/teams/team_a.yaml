@@ -4,6 +4,14 @@ team:
   name: "営業チームA"
   description: "東京エリア担当の営業チーム"
 
+# データソース設定（Git管理のCSV）
+data_source:
+  kind: "local_csv"
+  path: "data/teams/team_a.csv"
+  options:
+    encoding: "utf-8"
+    header: true
+
 # データフォーマット設定
 data_format:
   # CSV列定義

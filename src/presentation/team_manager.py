@@ -1,6 +1,10 @@
 """Team manager for session state abstraction."""
+import pandas as pd
+
+from src.domain.calculation import CalculationEngine
 from src.domain.team import Team
 from src.infrastructure.config.loader import ConfigurationError, TeamConfigManager
+from src.infrastructure.data.reader import DataReader, DataSourceError
 
 
 class TeamManager:
@@ -11,6 +15,8 @@ class TeamManager:
         self._teams: dict[str, Team] = {}
         self._config_manager = TeamConfigManager()
         self._config_error: str | None = None
+        self._data_reader = DataReader()
+        self._calc_engine = CalculationEngine()
         self._load_teams_from_config()
 
     def _load_teams_from_config(self) -> None:
@@ -80,3 +86,21 @@ class TeamManager:
             return self._config_manager.load_team_calculation_rules(team_id)
         except ConfigurationError:
             return None
+
+    def load_team_data(self, team_id: str) -> pd.DataFrame | None:
+        """チームのデータソースからDataFrameを読み込む."""
+        try:
+            data_format = self.get_team_data_format(team_id) or {}
+            return self._data_reader.load_team_dataframe(team_id, data_format)
+        except (ConfigurationError, DataSourceError):
+            return None
+
+    def compute_with_rules(self, team_id: str, df: pd.DataFrame | None) -> pd.DataFrame | None:
+        """読み込んだデータに計算ルールを適用したDataFrameを返す."""
+        if df is None:
+            return None
+        rules = self.get_team_calculation_rules(team_id) or []
+        try:
+            return self._calc_engine.apply_multiple_rules(df, rules)
+        except Exception:  # noqa: BLE001
+            return df

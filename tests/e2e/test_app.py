@@ -47,7 +47,7 @@ class TestTeamSelectionUI:
         expect(page.get_by_role("tab", name="📋 チーム設定")).to_be_visible()
         expect(page.get_by_role("tab", name="📊 データフォーマット")).to_be_visible()
         expect(page.get_by_role("tab", name="🧮 計算ルール")).to_be_visible()
-        expect(page.get_by_role("tab", name="🔄 Git連携")).to_be_visible()
+        expect(page.get_by_role("tab", name="📈 データ/計算結果")).to_be_visible()
 
 class TestNewTeamCreationFlow:
     """新規チーム作成のE2Eテスト."""
@@ -141,12 +141,11 @@ class TestTabSwitching:
         expect(calc_heading).to_be_visible()
         expect(page.get_by_text("🧮 計算ルール設定")).to_be_visible()
 
-    def test_can_switch_to_git_integration_tab(self, page: Page) -> None:
-        """Git連携タブをクリックすると内容が表示される."""
+    def test_can_switch_to_data_results_tab(self, page: Page) -> None:
+        """データ/計算結果タブをクリックすると内容が表示される."""
         page.goto(BASE_URL)
 
-        page.get_by_role("tab", name="🔄 Git連携").click()
+        page.get_by_role("tab", name="📈 データ/計算結果").click()
 
-        git_heading = page.get_by_role("heading", name="🔄 Git連携")
+        git_heading = page.get_by_role("heading", name="📈 データ読み込みと計算結果")
         expect(git_heading).to_be_visible()
-        expect(page.get_by_text("TODO: Git連携機能")).to_be_visible()

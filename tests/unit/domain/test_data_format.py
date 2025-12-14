@@ -75,7 +75,7 @@ class TestDataFormat:
         ]
         data_format = DataFormat(columns=columns)
 
-        if len(data_format.columns) != 2:  # noqa: PLR2004
+        if len(data_format.columns) != 2:
             msg = f"Expected 2 columns, got {len(data_format.columns)}"
             raise AssertionError(msg)
 

@@ -1,7 +1,5 @@
 __pycache__
 .coverage
 coverage.xml
-data/
 uploads/
-*.csv
-
+coverage.json

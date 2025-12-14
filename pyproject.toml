@@ -25,6 +25,9 @@ ignore = [
     "INP001",
     "TRY301",
     "RUF003",
+    "PLR2004",
+    "S101",
+    "RUF043",
 ]
 
 [build-system]
@@ -66,3 +69,13 @@ exclude_lines = [
     "if 0:",
     "if __name__ == .__main__.:",
 ]
+skip_covered = false
+skip_empty = true
+fail_under = 80
+precision = 2
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.json]
+show_contexts = true

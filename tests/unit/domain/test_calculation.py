@@ -448,10 +448,10 @@ class TestCalculationEngineAggregation:
         min_result = engine.apply_formula(sample_sales_data, min_rule)
         max_result = engine.apply_formula(sample_sales_data, max_rule)
 
-        if min_result.iloc[0] != 100:  # noqa: PLR2004
+        if min_result.iloc[0] != 100:
             msg = f"Expected min revenue 100, got {min_result.iloc[0]}"
             raise AssertionError(msg)
-        if max_result.iloc[0] != 300:  # noqa: PLR2004
+        if max_result.iloc[0] != 300:
             msg = f"Expected max revenue 300, got {max_result.iloc[0]}"
             raise AssertionError(msg)
 
