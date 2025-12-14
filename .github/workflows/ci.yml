@@ -21,11 +21,11 @@ jobs:
     - name: Install dependencies
       run: devbox run -- make install
     
+    - name: Verify Playwright installation
+      run: devbox run -- uv run playwright install --dry-run chromium || devbox run -- uv run playwright install chromium
+    
     - name: Run linting with ruff
       run: devbox run -- make lint
-    
-    - name: Run unit tests
-      run: devbox run -- make unit-test
     
     - name: Run tests with coverage
       run: devbox run -- make test-cov
@@ -41,4 +41,4 @@ jobs:
       env:
         E2E_BASE_URL: http://localhost:8501
         E2E_HEADLESS: true
-        PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+        PLAYWRIGHT_BROWSERS_PATH: $HOME/.cache/ms-playwright
