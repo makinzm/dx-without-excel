@@ -37,6 +37,8 @@ test:
 # Run tests with coverage (unit tests only)
 test-cov:
 	uv run pytest tests/unit/
+	uv run coverage json
+	uv run python scripts/check_coverage.py 80
 
 # Run tests with HTML coverage and open report
 test-cov-html: test-cov

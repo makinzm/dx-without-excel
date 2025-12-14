@@ -52,7 +52,7 @@ tab1, tab2, tab3, tab4 = st.tabs([
     "📋 チーム設定",
     "📊 データフォーマット",
     "🧮 計算ルール",
-    "🔄 Git連携",
+    "📈 データ/計算結果",
 ])
 
 with tab1:
@@ -171,5 +171,20 @@ with tab3:
         st.info("チームを選択して計算ルール設定を確認してください")
 
 with tab4:
-    st.header("🔄 Git連携")
-    st.write("TODO: Git連携機能")
+    st.header("📈 データ読み込みと計算結果")
+    if selected_team_id:
+        team = manager.get_team(selected_team_id)
+        st.info(f"チーム: {team.name}")
+
+        df = manager.load_team_data(selected_team_id)
+        if df is None:
+            st.warning("データの読み込みに失敗しました。設定を確認してください。")
+        else:
+            st.subheader("元データ")
+            st.dataframe(df, use_container_width=True)
+
+            computed = manager.compute_with_rules(selected_team_id, df)
+            st.subheader("計算結果")
+            st.dataframe(computed, use_container_width=True)
+    else:
+        st.info("チームを選択してデータを表示してください")
